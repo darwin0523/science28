@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Food Chain Fun v2: Science 4 Week 3</title>
+<style>
+:root{--bg:#dff4ff;--card:#fff;--ink:#12304a;--acc:#0a8fd1;--c2:#ff9f1c;--g1:#0a8fd1;--g2:#ff9f1c;--ok:#1fb86a;--bad:#e5384b;--soft:#bfe6fb;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1f33;--card:#16304c;--ink:#e8f6ff;--soft:#244a6e}}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 80% 0,var(--soft),transparent 55%),var(--bg);color:var(--ink);font-family:system-ui,sans-serif;padding:12px;text-align:center;min-height:100vh}
+.wrap{max-width:520px;margin:0 auto}
+h1{font-size:1.55rem;margin:4px 0;background:linear-gradient(90deg,var(--g1),#e8590c);-webkit-background-clip:text;background-clip:text;color:transparent}h2{font-size:1rem;margin:12px 0 4px}
+.sub{opacity:.8;font-size:.85rem}.hide{display:none!important}
+.card{background:var(--card);border-radius:18px;padding:12px;box-shadow:0 3px 10px #0003;margin:8px 0}
+button{font:inherit;cursor:pointer;border:0;border-radius:14px;color:inherit}
+.b{background:var(--acc);color:#fff;padding:12px 20px;font-weight:800;margin:4px}.b.alt{background:var(--soft);color:var(--ink)}.b.big{font-size:1.2rem;padding:15px 30px}
+input,select,textarea{font:inherit;color:inherit;background:var(--soft);border:0;border-radius:10px;padding:8px}
+textarea{width:100%;height:150px;font-size:.76rem;text-align:left}
+.pl{display:inline-flex;gap:4px;align-items:center;margin:3px}.pl input{width:125px}
+.mid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.game{border-radius:20px;padding:16px 6px;color:#fff;font-weight:900;box-shadow:0 5px 0 #0003}
+.game small{display:block;font-weight:500;opacity:.95;font-size:.72rem}
+.game .e{font-size:3.2rem;display:block;animation:bob 1.6s infinite alternate}@keyframes bob{to{transform:translateY(-6px) rotate(6deg) scale(1.08)}}
+.hud{display:flex;justify-content:space-between;font-weight:800;align-items:center;gap:6px}
+.bar{height:10px;background:var(--soft);border-radius:6px;overflow:hidden;margin:5px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--g1),var(--g2));width:100%;transition:width 1s linear}
+.pic{font-size:3.6rem;line-height:1.1}.q{font-size:1.1rem;font-weight:800;margin:6px 0}
+.arena{position:relative;height:330px;border-radius:18px;overflow:hidden;background:linear-gradient(#a8e6ff,#4fb4ea 65%,#2f86c6);touch-action:none;user-select:none}
+.fb{position:absolute;left:0;top:0;width:96px;padding:6px 4px;border-radius:40px;color:#fff;font-weight:800;font-size:.72rem;line-height:1.05;box-shadow:inset -6px -6px 0 #0003}.fb span{font-size:1.5rem;display:block}
+#rk{position:absolute;bottom:0;font-size:3rem;transform:translateX(-50%)}
+.tgt{font-size:1.05rem;font-weight:900;background:var(--c2);color:#12304a;border-radius:12px;padding:6px;margin:6px 0}
+.flash{animation:fs .3s}@keyframes fs{50%{filter:brightness(2)}}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.opt{background:var(--soft);padding:13px 6px;font-weight:800}.opt.x{opacity:.3}
+.clue{background:var(--soft);border-radius:12px;padding:8px 10px;margin:6px 0;font-weight:700;text-align:left;animation:pop .3s}@keyframes pop{from{transform:scale(.8);opacity:0}}
+.mg{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.mc{aspect-ratio:1;background:var(--acc);color:#fff;font-size:.7rem;font-weight:800;display:flex;align-items:center;justify-content:center;border-radius:12px;padding:3px;line-height:1.1;flex-direction:column}
+.mc.up{background:var(--soft);color:var(--ink)}.mc.dn{background:var(--ok);color:#fff}.mc b{font-size:1.5rem}
+svg text{font-family:system-ui,sans-serif}
+.shake{animation:sh .4s}@keyframes sh{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.row{display:flex;justify-content:space-between;gap:8px;padding:8px 12px;border-radius:10px;background:var(--soft);margin:5px 0;font-weight:700;text-align:left}.row.w{background:var(--acc);color:#fff}
+.fall{position:fixed;top:-30px;font-size:1.8rem;animation:fl 2.4s linear forwards;pointer-events:none;z-index:9}@keyframes fl{to{transform:translateY(110vh) rotate(360deg)}}
+</style></head><body><div class="wrap">
+
+<div id="home">
+ <div style="font-size:2.2rem">🐸🦗🌿🦅</div>
+ <h1>Food Chain Fun · Version 2</h1>
+ <div class="sub">Science 4 · Term 2 Week 3 · Who eats what? Follow the arrows!</div>
+ <div class="card"><h2>Players / Teams</h2><select id="pn"><option value="1">1 (Solo)</option><option>2</option><option>3</option><option selected>4</option></select><div id="pnames"></div>
+  <h2>Time per turn</h2><select id="time"><option value="60">1 minute</option><option value="90">1 minute 30 seconds</option><option value="120">2 minutes</option></select></div>
+ <div class="mid">
+  <button class="game" data-g="feed" style="background:linear-gradient(135deg,#0a8fd1,#1fb86a)"><span class="e">🐸</span>Feed the Animal<small>Catch only its food!</small></button>
+  <button class="game" data-g="draw" style="background:linear-gradient(135deg,#ff8a00,#e5384b)"><span class="e">🏹</span>Draw the Arrows<small>Connect food to eater</small></button>
+  <button class="game" data-g="who" style="background:linear-gradient(135deg,#7a3cff,#ff2d95)"><span class="e">🕵️</span>Who Am I?<small>Guess from the clues</small></button>
+  <button class="game" data-g="mem" style="background:linear-gradient(135deg,#00b8d9,#1f6bff)"><span class="e">🃏</span>Eater &amp; Food Match<small>Find the pairs</small></button>
+ </div>
+ <button class="b alt" id="edit">✏️ Edit chains &amp; animals</button>
+</div>
+
+<div id="editor" class="hide">
+ <h1>✏️ Edit Games</h1>
+ <div class="card">
+ <h2>Food chains: Title | 🌿 food ; 🦗 eater ; 🐸 next eater (food first!)</h2><textarea id="t0" style="height:190px"></textarea>
+ <h2>Animals: Emoji + name | Herbivore, Carnivore or Omnivore | what it eats (used for Who Am I? clues)</h2><textarea id="t1" style="height:190px"></textarea></div>
+ <div class="sub">All four games build their questions automatically from your chains.</div>
+ <button class="b" id="save">💾 Save</button><button class="b alt" id="reset">Reset</button><button class="b alt" id="back">← Back</button><div class="sub" id="emsg"></div>
+</div>
+
+<div id="stage" class="hide"></div>
+<div id="end" class="hide"><h1 id="et"></h1><div class="card" id="eb"></div><button class="b" id="again">↺ Play again</button></div>
+</div>
+<script>
+const DEF=[`Grass chain|🌿 grass;🦗 grasshopper;🐸 frog
+Rice chain|🌾 rice plant;🐔 chicken;🦅 Philippine eagle
+Forest chain|🍃 leaves;🦌 deer;🐯 tiger
+Farm chain|🌽 corn;🐖 pig;🧑 human
+Water chain|🟢 algae;🐟 small fish;🐠 big fish
+Tree chain|🍃 leaves;🐛 caterpillar;🐦 bird
+Garden chain|🌸 flower nectar;🦋 butterfly;🐦 bird
+Field chain|🌾 rice plant;🐀 rat;🐍 snake
+Backyard chain|🌽 corn;🐔 chicken;🧑 human
+Pond chain|🌱 water plants;🐟 fish;🦩 heron
+Banana chain|🍌 banana plant;🐒 monkey;🦅 Philippine eagle
+Long chain|🌿 grass;🐛 insect;🐸 frog;🐍 snake;🦅 Philippine eagle`,`🐃 Carabao|Herbivore|grass and other plants
+🦅 Philippine eagle|Carnivore|small animals like snakes and mammals
+🐖 Pig|Omnivore|fruits, vegetables and small animals
+🐐 Goat|Herbivore|leaves and grass
+🐈 Cat|Carnivore|fish and other animals
+🦌 Philippine deer|Herbivore|grass, leaves and fruits
+🐔 Chicken|Omnivore|seeds, grains and small insects
+🐯 Tiger|Carnivore|other animals like deer
+🐇 Rabbit|Herbivore|grass and plants
+🐸 Frog|Carnivore|insects like grasshoppers
+🐍 Snake|Carnivore|rats and small animals
+🧑 Human|Omnivore|both plants and animals
+🐛 Caterpillar|Herbivore|leaves
+🦗 Grasshopper|Herbivore|grass
+🐒 Monkey|Omnivore|fruits and insects
+🐠 Big fish|Carnivore|small fish`];
+const $=id=>document.getElementById(id),R=a=>a[Math.random()*a.length|0],S=a=>[...a].sort(()=>Math.random()-.5);
+const AV=["🦊","🐯","🐼","🦄"],fmt=s=>s==60?"1 minute":s==90?"1 minute 30 seconds":"2 minutes";
+let CHn=[],AN=[],EAT={},BY={},ORG=[],EDG=[],P=[],T=60,SI=0,G="",ct=null,raf=null;
+function rd(k,d){try{return localStorage.getItem(k)||d}catch(e){return d}}
+function ld(){DEF.forEach((d,n)=>$("t"+n).value=rd("fd"+n,d));parse()}
+const L=(id,m)=>$(id).value.split("\n").map(l=>l.split("|").map(x=>x.trim())).filter(p=>p.length>=m&&p[0]);
+const typ=s=>/^h/i.test(s)?"Herbivore":/^c/i.test(s)?"Carnivore":"Omnivore";
+const em=s=>s.split(" ")[0],nm=s=>s.split(" ").slice(1).join(" ")||s;
+function parse(){CHn=L("t0",2).map(p=>({t:p[0],s:p[1].split(";").map(x=>x.trim()).filter(Boolean)})).filter(x=>x.s.length>=2);
+ AN=L("t1",2).map(p=>({k:nm(p[0]).toLowerCase(),t:typ(p[1]),r:p[2]||""}));
+ EAT={};BY={};EDG=[];const o=new Set();
+ CHn.forEach(c=>c.s.forEach((x,i)=>{o.add(x);if(i>0){const f=c.s[i-1];(EAT[x]=EAT[x]||new Set()).add(f);(BY[f]=BY[f]||new Set()).add(x);EDG.push([f,x])}}));ORG=[...o]}
+function show(id){["home","editor","stage","end"].forEach(x=>$(x).classList.toggle("hide",x!==id))}
+function stop(){clearInterval(ct);cancelAnimationFrame(raf);raf=null}
+function pn(){const n=+$("pn").value;$("pnames").innerHTML=Array.from({length:n},(_,i)=>`<span class="pl">${AV[i]}<input value="${n==1?"Player":"Team "+(i+1)}" maxlength="14"></span>`).join("")}
+$("pn").onchange=pn;$("edit").onclick=()=>{ld();show("editor")};$("back").onclick=()=>{ld();show("home")};
+$("save").onclick=()=>{parse();try{DEF.forEach((d,n)=>localStorage.setItem("fd"+n,$("t"+n).value))}catch(e){}$("emsg").textContent="✅ Saved!"};
+$("reset").onclick=()=>{try{[0,1].forEach(n=>localStorage.removeItem("fd"+n))}catch(e){}ld();$("emsg").textContent="Reset to default."};
+$("again").onclick=()=>show("home");
+function party(){for(let k=0;k<26;k++){const e=document.createElement("div");e.className="fall";e.textContent=["🎉","⭐","🏆","🦋","🐸"][k%5];e.style.left=Math.random()*95+"vw";e.style.animationDelay=Math.random()*.9+"s";document.body.appendChild(e);setTimeout(()=>e.remove(),3400)}}
+document.querySelectorAll(".game").forEach(b=>b.onclick=()=>{parse();const g=b.dataset.g;
+ if((g=="draw"&&CHn.length<1)||(g!="draw"&&(EDG.length<4||ORG.length<4))||(g=="mem"&&new Set(EDG.map(e=>e[1])).size<3)){alert("Not enough chains. Open ✏️ Edit and add more.");return}
+ G=g;T=+$("time").value;P=[...$("pnames").querySelectorAll("input")].map((e,i)=>({n:e.value||"Team "+(i+1),av:AV[i],sc:0,note:""}));SI=0;ready()});
+const INFO={feed:"Move the hungry animal (drag, or ◀ ▶ keys). Catch ONLY the food it eats. Catching the wrong thing costs points. The animal changes now and then!",
+ draw:"Tap the FOOD first, then the organism that EATS it, to draw an arrow. The arrow points from the food to the eater. Connect the whole chain!",
+ who:"Guess the organism from the clues! You start with one clue. Ask for more clues if you need them, but fewer clues = more points.",
+ mem:"Flip cards to match each eater with its food. Clear the board for a bonus, then a new one appears!"};
+function ready(){const p=P[SI];$("stage").innerHTML=`<h1>${p.av} ${p.n}, get ready!</h1><div class="card"><div style="font-size:3rem">${{feed:"🐸",draw:"🏹",who:"🕵️",mem:"🃏"}[G]}</div><div>${INFO[G]}</div><div class="sub" style="margin-top:6px">Time: ${fmt(T)}</div></div><button class="b big" id="go">▶ Go!</button><br><button class="b alt" id="mn">← Menu</button>`;
+ show("stage");$("go").onclick=()=>({feed,draw,who,mem})[G]();$("mn").onclick=()=>{stop();show("home")}}
+function hud(p,x){$("stage").innerHTML=`<div class="hud"><span>${p.av} ${p.n}</span><span>⭐ <span id="sc">0</span></span><span>⏱ <span id="tc"></span></span></div><div class="bar"><i id="tb2"></i></div>${x}`}
+function runT(onEnd){let left=T;clearInterval(ct);const tk=()=>{$("tc").textContent=Math.floor(left/60)+":"+String(left%60).padStart(2,"0");$("tb2").style.width=(left/T*100)+"%";if(left<=0){stop();onEnd();return}left--};tk();ct=setInterval(tk,1000)}
+function fin(score,note){stop();document.onkeydown=null;const p=P[SI];p.sc=score;p.note=note||"";if(++SI<P.length)ready();else results()}
+function results(){const r=[...P].sort((a,b)=>b.sc-a.sc),tie=r.length>1&&r[0].sc==r[1].sc;
+ $("et").textContent=P.length==1?"⏰ Time's up!":tie?"🤝 It's a tie!":"🏆 "+r[0].n+" wins!";
+ $("eb").innerHTML=r.map((p,i)=>`<div class="row ${i==0&&!tie?"w":""}"><span>${i+1}. ${p.av} ${p.n}<br><small>${p.note}</small></span><span>⭐ ${p.sc}</span></div>`).join("");show("end");party()}
+const bad=el=>{if(!el)return;el.classList.remove("shake");void el.offsetWidth;el.classList.add("shake")};
+// ---------- 🐸 Feed the Animal
+function feed(){const p=P[SI],eaters=Object.keys(EAT);let sc=0,caught=0,tg=R(eaters),objs=[],bx=0,last=0;
+ hud(p,`<div class="tgt" id="tg"></div><div class="arena" id="ar"><div id="rk"></div></div><div class="sub">Drag to move · ◀ ▶ keys work too</div>`);
+ const ar=$("ar"),W=ar.clientWidth,H=ar.clientHeight,CL=["#e8590c","#7a3cff","#d6336c","#1c7ed6","#2f9e44"];bx=W/2;
+ const mv=x=>{bx=Math.max(35,Math.min(W-35,x));$("rk").style.left=bx+"px"};mv(bx);
+ ar.onpointermove=e=>mv(e.clientX-ar.getBoundingClientRect().left);ar.onpointerdown=ar.onpointermove;
+ document.onkeydown=e=>{if(e.key=="ArrowLeft")mv(bx-40);if(e.key=="ArrowRight")mv(bx+40)};
+ const setT=()=>{$("rk").textContent=em(tg);$("tg").textContent=`${em(tg)} The ${nm(tg)} is hungry! Catch its food.`};setT();
+ const sw=setInterval(()=>{const o=eaters.filter(x=>x!=tg);tg=R(o.length?o:eaters);setT();objs.forEach(o=>o.el.remove());objs=[]},13000);
+ const spawn=()=>{if(!$("ar")){clearInterval(sp);clearInterval(sw);return}const f=[...EAT[tg]],nf=ORG.filter(x=>!EAT[tg].has(x)&&x!=tg),it=Math.random()<.55||!nf.length?R(f):R(nf),el=document.createElement("div");
+  el.className="fb";el.style.background=CL[(Math.random()*5)|0];el.innerHTML=`<span>${em(it)}</span>${nm(it)}`;ar.appendChild(el);objs.push({el,ok:EAT[tg].has(it),x:Math.random()*(W-96),y:-50,v:70+Math.random()*35})};
+ spawn();const sp=setInterval(spawn,1000);last=performance.now();
+ const loop=n=>{if(!$("ar"))return;const dt=Math.min(.05,(n-last)/1000);last=n;
+  objs=objs.filter(o=>{o.y+=o.v*dt;o.el.style.transform=`translate(${o.x}px,${o.y}px)`;
+   if(o.y>H-85&&o.y<H-15&&Math.abs(o.x+48-bx)<62){o.el.remove();if(o.ok){sc+=10;caught++}else sc=Math.max(0,sc-5);$("sc").textContent=sc;ar.classList.remove("flash");void ar.offsetWidth;ar.classList.add("flash");return false}
+   if(o.y>H){o.el.remove();return false}return true});raf=requestAnimationFrame(loop)};
+ raf=requestAnimationFrame(loop);runT(()=>{clearInterval(sw);clearInterval(sp);fin(sc,caught+" correct catches")})}
+// ---------- 🏹 Draw the Arrows
+function draw(){let d=S(CHn),sc=0,n=0,mis=0;hud(P[SI],`<div class="card"><div class="q" id="dq"></div><svg id="sv" viewBox="0 0 360 230" width="100%"></svg><div class="sub" id="dm" style="min-height:2.4em"></div></div>`);
+ const nx=()=>{if(!d.length)d=S(CHn);const c=d.pop();mis=0;$("dq").textContent="Draw the arrows: "+c.t;let sel=null;const done=new Set(),k=c.s.length,slots=S(c.s.map((_,i)=>i)),
+  px=i=>k==1?180:36+i*(288/(k-1));
+  const rn=()=>{let s=`<defs><marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#e8590c"/></marker></defs>`;
+   done.forEach(e=>{const[a,b]=e.split(">").map(Number),sa=slots.indexOf(a),sb=slots.indexOf(b),x1=px(sa),x2=px(sb),dir=a%2?1:-1,cy=115+dir*75,sx=x1+(x2>x1?30:-30),ex=x2+(x2>x1?-34:34);
+    s+=`<path d="M${sx} ${115+dir*10} Q${(x1+x2)/2} ${cy} ${ex} ${115+dir*10}" fill="none" stroke="#e8590c" stroke-width="4" marker-end="url(#ah)"/>`});
+   slots.forEach((ci,si)=>{const x=px(si),it=c.s[ci];s+=`<g data-i="${si}" style="cursor:pointer"><circle cx="${x}" cy="115" r="30" fill="${sel===si?"#ffd43b":"var(--card)"}" stroke="${sel===si?"#e8590c":"#6b7a90"}" stroke-width="3"/><text x="${x}" y="126" font-size="32" text-anchor="middle">${em(it)}</text><text x="${x}" y="168" font-size="${k>4?10:12}" text-anchor="middle" font-weight="800" fill="currentColor">${nm(it)}</text></g>`});
+   $("sv").innerHTML=s;$("sv").querySelectorAll("g").forEach(g=>g.onclick=()=>pick(+g.dataset.i))};
+  const pick=si=>{if(sel==null){sel=si;rn();return}if(sel==si){sel=null;rn();return}const a=slots[sel],b=slots[si];
+   if(b==a+1&&!done.has(a+">"+b)){done.add(a+">"+b);sel=null;$("dm").textContent="✅ Nice arrow!";rn();
+    if(done.size==k-1){sc+=Math.max(5,15-2*mis);n++;$("sc").textContent=sc;$("dm").textContent="🎉 Food chain complete!";setTimeout(()=>{if($("sv"))nx()},1000)}}
+   else{mis++;$("dm").textContent=a==b+1?"❌ Wrong way! The arrow points FROM the food TO the eater.":"❌ Those two aren't linked that way. Try again!";sel=null;bad($("sv"));rn()}};
+  rn()};
+ nx();runT(()=>fin(sc,n+" chains drawn"))}
+// ---------- 🕵️ Who Am I?
+function clues(o){const a=AN.find(x=>x.k==nm(o).toLowerCase()),eats=EAT[o]?[...EAT[o]].map(nm):[],by=BY[o]?[...BY[o]].map(nm):[],list=[];
+ list.push(a?"I am a "+a.t.toLowerCase()+".":EAT[o]?"I am an animal in a food chain.":"I am a living thing that starts a food chain.");
+ list.push(eats.length?"I eat "+eats.join(" and ")+".":"I make my own food. I do not eat other organisms.");
+ list.push(by.length?"I provide food for the "+by.join(" and the ")+".":"Nothing in these food chains eats me.");
+ list.push("Picture clue: "+em(o));return list}
+function who(){let d=S(ORG),sc=0,n=0;hud(P[SI],`<div class="card"><div class="pic">❓</div><div id="wc"></div><div><button class="b alt" id="mc" style="display:none">💡 Another clue</button></div><div class="opts" id="wo"></div><div class="sub" id="wm" style="min-height:1.6em"></div></div>`);
+ const nx=()=>{if(!d.length)d=S(ORG);const o=d.pop(),cl=clues(o);let sh=1,lock=false;const op=S([o,...S(ORG.filter(x=>x!=o)).slice(0,3)]);$("wm").textContent="";
+  const rn=()=>{$("wc").innerHTML=cl.slice(0,sh).map(c=>`<div class="clue">${c}</div>`).join("");$("mc").style.display=sh<cl.length?"":"none";$("wc").previousElementSibling.textContent=sh==4?em(o):"❓"};
+  $("mc").onclick=()=>{if(sh<cl.length){sh++;rn()}};
+  $("wo").innerHTML=op.map(x=>`<button class="opt">${nm(x)}</button>`).join("");
+  $("wo").querySelectorAll(".opt").forEach((b,i)=>b.onclick=()=>{if(lock)return;if(op[i]===o){lock=true;const pts=[30,20,10,5][sh-1];sc+=pts;n++;$("sc").textContent=sc;b.style.background="var(--ok)";b.style.color="#fff";$("wc").previousElementSibling.textContent=em(o);$("wm").textContent=`🎉 It's the ${nm(o)}! +${pts}`;setTimeout(()=>{if($("wo"))nx()},1100)}
+   else{b.classList.add("x");sc=Math.max(0,sc-5);$("sc").textContent=sc;bad($("wo"))}});rn()};
+ nx();runT(()=>fin(sc,n+" organisms guessed"))}
+// ---------- 🃏 Eater & Food Match
+function mem(){let sc=0,boards=0;hud(P[SI],`<div class="mg" id="mg"></div>`);
+ const board=()=>{const by={};EDG.forEach(([f,e])=>{(by[e]=by[e]||[]).push(f)});let cards=[];
+  const used=new Set();let k=0;for(const e of S(Object.keys(by))){if(k>=6)break;const fs=by[e].filter(x=>!used.has(x));if(!fs.length)continue;const f=R(fs);used.add(f);cards.push({k,h:`<b>${em(e)}</b>${nm(e)}`},{k,h:`eats<b>${em(f)}</b>${nm(f)}`});k++}
+  cards=S(cards);let open=[],lock=false,found=0;const tot=cards.length/2;
+  const rn=()=>{$("mg").innerHTML=cards.map((c,i)=>`<div class="mc ${c.d?"dn":open.includes(i)?"up":""}" data-i="${i}">${c.d||open.includes(i)?c.h:"❔"}</div>`).join("");
+   $("mg").querySelectorAll(".mc").forEach(e=>e.onclick=()=>{const i=+e.dataset.i;if(lock||cards[i].d||open.includes(i))return;open.push(i);rn();
+    if(open.length==2){lock=true;const[a,b]=open.map(j=>cards[j]);setTimeout(()=>{if(!$("mg"))return;if(a.k==b.k){a.d=b.d=true;found++;sc+=10;$("sc").textContent=sc}open=[];lock=false;rn();if(found==tot){boards++;sc+=20;$("sc").textContent=sc;setTimeout(()=>{if($("mg"))board()},500)}},750)}})};rn()};
+ board();runT(()=>fin(sc,boards+" boards cleared"))}
+pn();ld();
+</script></body></html>
